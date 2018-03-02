@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="npm,vue-cli," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在有了迅捷开发的概念和需求后，cli随运而生，它将大大浓缩开发的时间与成本，在此，我将就vue-cli大致讲一下自动获取开发模板的脚手架的开发。">
+<meta name="keywords" content="npm,vue-cli">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从vue-cli探知脚手架">
+<meta property="og:url" content="http://yoursite.com/2018/03/02/从vue-cli探知脚手架/index.html">
+<meta property="og:site_name" content="WuChunlin">
+<meta property="og:description" content="在有了迅捷开发的概念和需求后，cli随运而生，它将大大浓缩开发的时间与成本，在此，我将就vue-cli大致讲一下自动获取开发模板的脚手架的开发。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-02T08:11:06.545Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从vue-cli探知脚手架">
+<meta name="twitter:description" content="在有了迅捷开发的概念和需求后，cli随运而生，它将大大浓缩开发的时间与成本，在此，我将就vue-cli大致讲一下自动获取开发模板的脚手架的开发。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/02/从vue-cli探知脚手架/"/>
+
+
+
+
+
+  <title>从vue-cli探知脚手架 | WuChunlin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WuChunlin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/02/从vue-cli探知脚手架/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chunlin Wu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WuChunlin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从vue-cli探知脚手架</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-02T14:53:25+08:00">
+                2018-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在有了迅捷开发的概念和需求后，cli随运而生，它将大大浓缩开发的时间与成本，在此，我将就vue-cli大致讲一下自动获取开发模板的脚手架的开发。</p>
+<a id="more"></a>
+<h2 id="vue-cli源码"><a href="#vue-cli源码" class="headerlink" title="vue-cli源码"></a>vue-cli源码</h2><h3 id="vue文件"><a href="#vue文件" class="headerlink" title="vue文件"></a>vue文件</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">'commander'</span>)</span><br><span class="line">  .version(<span class="built_in">require</span>(<span class="string">'../package'</span>).version)</span><br><span class="line">  .usage(<span class="string">'&lt;command&gt; [options]'</span>)</span><br><span class="line">  .command(<span class="string">'init'</span>, <span class="string">'generate a new project from a template'</span>)</span><br><span class="line">  .command(<span class="string">'list'</span>, <span class="string">'list available official templates'</span>)</span><br><span class="line">  .command(<span class="string">'build'</span>, <span class="string">'prototype a new project'</span>)</span><br><span class="line">  .parse(process.argv)</span><br></pre></td></tr></table></figure>
+<p>vue文件是vue-cli的入口文件，在此处定义了该cli所具备的基本命令（-help -V除外）。</p>
+<h3 id="vue-init-文件"><a href="#vue-init-文件" class="headerlink" title="vue-init 文件"></a>vue-init 文件</h3><p>目前的需求是方便快捷的获取备好的模板进行开发，那么就init命令讲解。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> download = <span class="built_in">require</span>(<span class="string">'download-git-repo'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://github.com/flipxfx/download-git-repo" target="_blank" rel="noopener">download-git-repo</a>是用于下载模板的插件，github上有其使用的方法，当然也可以查看源码。在下面将会用到这个插件下载public的资源。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> generate = <span class="built_in">require</span>(<span class="string">'../lib/generate'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>generate是vue自己完成的一个js文件，主要作用是将下载下来的资源重命名并放入当前npm run的目录下。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> program = <span class="built_in">require</span>(<span class="string">'commander'</span>)</span><br><span class="line"></span><br><span class="line">program</span><br><span class="line">  .usage(<span class="string">'&lt;template-name&gt; [project-name]'</span>)</span><br><span class="line">  .option(<span class="string">'-c, --clone'</span>, <span class="string">'use git clone'</span>)</span><br><span class="line">  .option(<span class="string">'--offline'</span>, <span class="string">'use cached template'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>program查看<a href="https://github.com/tj/commander.js" target="_blank" rel="noopener">commander</a>。</p>
+<p>help就跳过不谈</p>
+<h1 id="setting"><a href="#setting" class="headerlink" title="setting"></a>setting</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> template = program.args[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">const</span> hasSlash = template.indexOf(<span class="string">'/'</span>) &gt; <span class="number">-1</span></span><br><span class="line"><span class="keyword">const</span> rawName = program.args[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">const</span> inPlace = !rawName || rawName === <span class="string">'.'</span></span><br><span class="line"><span class="keyword">const</span> name = inPlace ? path.relative(<span class="string">'../'</span>, process.cwd()) : rawName</span><br><span class="line"><span class="keyword">const</span> to = path.resolve(rawName || <span class="string">'.'</span>)</span><br><span class="line"><span class="keyword">const</span> clone = program.clone || <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> tmp = path.join(home, <span class="string">'.vue-templates'</span>, template.replace(<span class="regexp">/[\/:]/g</span>, <span class="string">'-'</span>))</span><br><span class="line"><span class="keyword">if</span> (program.offline) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`&gt; Use cached template at <span class="subst">$&#123;chalk.yellow(tildify(tmp))&#125;</span>`</span>)</span><br><span class="line">  template = tmp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>vue-init命令应该不陌生，使用方式：vue init webpack myproject<br>template 即webpack（来源于网上的开源模板，有cue团队维护），<br>rawName 即myproject（自己新建的项目名称），<br>name 即通过判定命令行中第二个参数是否存在所对应的值（路径或者参数），<br>to 即当前命令行运行的目录</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (inPlace || exists(to)) &#123;</span><br><span class="line">  inquirer.prompt([&#123;</span><br><span class="line">    type: <span class="string">'confirm'</span>,</span><br><span class="line">    message: inPlace</span><br><span class="line">      ? <span class="string">'Generate project in current directory?'</span></span><br><span class="line">      : <span class="string">'Target directory exists. Continue?'</span>,</span><br><span class="line">    name: <span class="string">'ok'</span></span><br><span class="line">  &#125;]).then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (answers.ok) &#123;</span><br><span class="line">      run()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).catch(logger.fatal)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过判定第二个参数是否存在，使得用户能够选择是否在当前目录下创建新项目</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">run</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// check if template is local</span></span><br><span class="line">  <span class="keyword">if</span> (isLocalPath(template)) &#123;</span><br><span class="line">    <span class="keyword">const</span> templatePath = getTemplatePath(template)</span><br><span class="line">    <span class="keyword">if</span> (exists(templatePath)) &#123;</span><br><span class="line">      generate(name, templatePath, to, err =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) logger.fatal(err)</span><br><span class="line">        <span class="built_in">console</span>.log()</span><br><span class="line">        logger.success(<span class="string">'Generated "%s".'</span>, name)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      logger.fatal(<span class="string">'Local template "%s" not found.'</span>, template)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    checkVersion(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!hasSlash) &#123;</span><br><span class="line">        <span class="comment">// use official templates</span></span><br><span class="line">        <span class="keyword">const</span> officialTemplate = <span class="string">'vuejs-templates/'</span> + template</span><br><span class="line">        <span class="keyword">if</span> (template.indexOf(<span class="string">'#'</span>) !== <span class="number">-1</span>) &#123;</span><br><span class="line">          downloadAndGenerate(officialTemplate)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (template.indexOf(<span class="string">'-2.0'</span>) !== <span class="number">-1</span>) &#123;</span><br><span class="line">            warnings.v2SuffixTemplatesDeprecated(template, inPlace ? <span class="string">''</span> : name)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// warnings.v2BranchIsNowDefault(template, inPlace ? '' : name)</span></span><br><span class="line">          downloadAndGenerate(officialTemplate)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        downloadAndGenerate(template)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此代码中，判定模板是否存在本地中，若是，则直接获取本地模板，反之从网络获取资源<br>officialTemplate 参数是对命令行参数的扩写，使其在download-git-repo调取资源时，符合预存模板的路径</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">downloadAndGenerate</span> (<span class="params">template</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> spinner = ora(<span class="string">'downloading template'</span>)</span><br><span class="line">  spinner.start()</span><br><span class="line">  <span class="comment">// Remove if local template exists</span></span><br><span class="line">  <span class="keyword">if</span> (exists(tmp)) rm(tmp)</span><br><span class="line">  download(template, tmp, &#123; clone &#125;, err =&gt; &#123;</span><br><span class="line">    spinner.stop()</span><br><span class="line">    <span class="keyword">if</span> (err) logger.fatal(<span class="string">'Failed to download repo '</span> + template + <span class="string">': '</span> + err.message.trim())</span><br><span class="line">    generate(name, tmp, to, err =&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) logger.fatal(err)</span><br><span class="line">      <span class="built_in">console</span>.log()</span><br><span class="line">      logger.success(<span class="string">'Generated "%s".'</span>, name)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此函数中，通过调用download下载网络上的预存模板，temp为命令行运行的目录<br>通过调用generate将下载下来的模板重命名并创建至命令行当前目录</p>
+<h3 id="通过以上的讲解，不难通过修改vuecli的网络请求路径实现自己的简单cli（从网络拉取模板的cli）"><a href="#通过以上的讲解，不难通过修改vuecli的网络请求路径实现自己的简单cli（从网络拉取模板的cli）" class="headerlink" title="通过以上的讲解，不难通过修改vuecli的网络请求路径实现自己的简单cli（从网络拉取模板的cli）"></a>通过以上的讲解，不难通过修改vuecli的网络请求路径实现自己的简单cli（从网络拉取模板的cli）</h3><h2 id="npm发布包"><a href="#npm发布包" class="headerlink" title="npm发布包"></a>npm发布包</h2><p>当然，为了方便使用自己的包，不妨将其发布到npm上，通过 npm i yourmodule -g 安装使用岂不美哉。<br>下面就讲一下如何发布自己的npm包。</p>
+<h4 id="首先，你需要有一个npm的账号"><a href="#首先，你需要有一个npm的账号" class="headerlink" title="首先，你需要有一个npm的账号"></a>首先，你需要有一个npm的账号</h4><p>在自己的cli目录下<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure></p>
+<p>这里将会有一长串的选填，结果都会写入package.json中。<br>然后你得去package文件中找到main或者entry并配置为vue（基于vue-cli来说，自主开发的包就新建index并配置）<br>然后<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm login</span><br></pre></td></tr></table></figure></p>
+<p>没有账号的就注册。<br>登陆成功之后<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm publish</span><br></pre></td></tr></table></figure></p>
+<p>但是要确保你的包名在npm未被占用，否则发布不成功<br>然后你就可以，美滋滋的使用npm i你的包~</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/npm-vue-cli/" rel="tag"># npm,vue-cli</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/02/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chunlin Wu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vue-cli源码"><span class="nav-number">1.</span> <span class="nav-text">vue-cli源码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vue文件"><span class="nav-number">1.1.</span> <span class="nav-text">vue文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vue-init-文件"><span class="nav-number">1.2.</span> <span class="nav-text">vue-init 文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#setting"><span class="nav-number"></span> <span class="nav-text">setting</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过以上的讲解，不难通过修改vuecli的网络请求路径实现自己的简单cli（从网络拉取模板的cli）"><span class="nav-number">0.1.</span> <span class="nav-text">通过以上的讲解，不难通过修改vuecli的网络请求路径实现自己的简单cli（从网络拉取模板的cli）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm发布包"><span class="nav-number">1.</span> <span class="nav-text">npm发布包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先，你需要有一个npm的账号"><span class="nav-number">1.0.1.</span> <span class="nav-text">首先，你需要有一个npm的账号</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chunlin Wu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
